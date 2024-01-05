@@ -232,7 +232,14 @@ class DokterDashboard extends Controller
             ->select('pasien.nama', 'daftar_poli.keluhan', 'periksa.tgl_periksa', 'periksa.catatan', 'periksa.id as id_periksa', 'periksa.biaya_periksa')
             ->get();
         foreach ($oldPasien as $value) {
-        $periksa[] = [
+            $obat = Periksa::join('detail_periksa', 'periksa.id', '=', 'detail_periksa.id_periksa')
+                ->join('obat', 'detail_periksa.id_obat', '=', 'obat.id')
+                ->join('daftar_poli', 'periksa.id_daftar_poli', '=', 'daftar_poli.id')
+                ->where('daftar_poli.status', 'selesai')
+                ->where('periksa.id', $value->id_periksa)
+                ->select('obat.nama_obat')
+                ->get();
+            $periksa[] = [
                 'nama' => $value->nama,
                 'keluhan' => $value->keluhan,
                 'tgl_periksa' => $value->tgl_periksa,
@@ -242,7 +249,7 @@ class DokterDashboard extends Controller
             ];
         }
         // dd($pasienDalamAntrian, $daftar_poli, $allObat, $today, $defaultChoosen, $hargaDataObat);
-        return view('dokter.periksa', compact('pasienDalamAntrian', 'daftar_poli', 'allObat', 'today', 'defaultChoosen', 'hargaDataObat', 'id_daftar_poli'));
+        return view('dokter.periksa', compact('pasienDalamAntrian', 'daftar_poli', 'allObat', 'today', 'defaultChoosen', 'hargaDataObat', 'id_daftar_poli', 'periksa'));
     }
 
     public function periksaProsesInsert(Request $request)
