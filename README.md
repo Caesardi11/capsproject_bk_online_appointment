@@ -7,7 +7,7 @@ Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di b
 1. Clone repository:
 
     ```bash
-    git clone https://github.com/safiarazl/Capstone-project-BK.git
+    git clone https://github.com/Caesardi11/capsproject_bk_online_appointment.git
     ```
 
 2. Instal dependensi menggunakan Composer:
@@ -47,6 +47,10 @@ Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di b
 | Admin  | admin@gmail.com      | admin@gmail.com |
 | Doctor | dokterbudi@gmail.com | 123             |
 | Pasien | ahmad@gmail.com      | 123             |
+
+## Database
+
+Database yang digunakan yaitu `capsproject_bk`
 
 ## Langkah Tambahan
 
