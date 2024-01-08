@@ -47,7 +47,6 @@ middleware(['auth'])->group(function () {
         Route::get('admin/edit-dokter/{id}', [AdminDashboard::class, 'editDokter'])->name('editDokter');
         Route::put('admin/edit-dokter-proses/{id}', [AdminDashboard::class, 'editDokterProses'])->name('editDokterProses');
         Route::delete('admin/hapus-dokter/{id}', [AdminDashboard::class, 'hapusDokter'])->name('hapusDokter');
-
         //manage poli
         Route::get('admin/manage-poli', [AdminDashboard::class, 'managePoli'])->name('managePoli');
         Route::get('admin/tambah-poli', [AdminDashboard::class, 'tambahPoli'])->name('tambahPoli');
@@ -55,7 +54,6 @@ middleware(['auth'])->group(function () {
         Route::get('admin/edit-poli/{id}', [AdminDashboard::class, 'editPoli'])->name('editPoli');
         Route::put('admin/edit-poli-proses/{id}', [AdminDashboard::class, 'editPoliProses'])->name('editPoliProses');
         Route::delete('admin/hapus-poli/{id}', [AdminDashboard::class, 'hapusPoli'])->name('hapusPoli');
-
         //manage pasien
         Route::get('admin/manage-pasien', [AdminDashboard::class, 'managePasien'])->name('managePasien');
         Route::get('admin/tambah-pasien', [AdminDashboard::class, 'tambahPasien'])->name('tambahPasien');
@@ -63,7 +61,6 @@ middleware(['auth'])->group(function () {
         Route::get('admin/edit-pasien/{id}', [AdminDashboard::class, 'editPasien'])->name('editPasien');
         Route::put('admin/edit-pasien-proses/{id}', [AdminDashboard::class, 'editPasienProses'])->name('editPasienProses');
         Route::delete('admin/hapus-pasien/{id}', [AdminDashboard::class, 'hapusPasien'])->name('hapusPasien');
-
         //manage obat
         Route::get('admin/manage-obat', [AdminDashboard::class, 'manageObat'])->name('manageObat');
         Route::get('admin/tambah-obat', [AdminDashboard::class, 'tambahObat'])->name('tambahObat');

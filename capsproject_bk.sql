@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 06 Jan 2024 pada 05.19
+-- Waktu pembuatan: 08 Jan 2024 pada 07.15
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -34,15 +34,6 @@ CREATE TABLE `akun` (
   `role` enum('admin','dokter','pasien') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `akun`
---
-
-INSERT INTO `akun` (`id`, `email`, `password`, `role`) VALUES
-(7, 'kampoengbola6@gmail.com', '$2y$10$FM.1ovaRdUQihqECbmPBkeExBhZaWuJmz44Y19nhaKP.4MNo.7yHm', 'pasien'),
-(8, 'admin@email.com', '$2y$10$FM.1ovaRdUQihqECbmPBkeExBhZaWuJmz44Y19nhaKP.4MNo.7yHm', 'admin'),
-(9, 'safiardemak@kalijaga.com', '$2y$10$.f0SAjUUGuKSvxn2yeiiHOKA5kNDzmcztk8kTzXPe2k7c8MKJZKZu', 'pasien');
-
 -- --------------------------------------------------------
 
 --
@@ -66,7 +57,8 @@ INSERT INTO `daftar_poli` (`id`, `id_pasien`, `id_jadwal`, `keluhan`, `no_antria
 (11, 10, 1, 'Matanya pusing, bibirnya tidak bisa dengar.', 1, 'selesai'),
 (15, 7, 6, 'cekcekcek', 1, 'selesai'),
 (16, 7, 1, 'bismillah cek', 2, 'selesai'),
-(17, 14, 1, 'Anak saya mimisan dari telinganya, saran tws murah range 100k-200k apa ya dok?', 3, 'selesai');
+(18, 10, 1, 'Sakit', 4, 'selesai'),
+(19, 16, 6, 'Gigi taring saya keropos, bagaimana caranya agak tidak ngilu saat menghancurkan makanannya?', 2, 'selesai');
 
 -- --------------------------------------------------------
 
@@ -91,7 +83,12 @@ INSERT INTO `detail_periksa` (`id`, `id_periksa`, `id_obat`) VALUES
 (4, 2, 4),
 (5, 3, 1),
 (6, 3, 4),
-(7, 4, 1);
+(8, 5, 1),
+(9, 5, 2),
+(10, 5, 3),
+(11, 6, 1),
+(12, 6, 3),
+(13, 6, 4);
 
 -- --------------------------------------------------------
 
@@ -152,8 +149,8 @@ CREATE TABLE `jadwal_periksa` (
 --
 
 INSERT INTO `jadwal_periksa` (`id`, `id_dokter`, `hari`, `jam_mulai`, `jam_selesai`) VALUES
-(1, 4, 'Jumat', '22:15:00', '22:17:00'),
-(6, 7, 'Jumat', '10:00:00', '12:00:00');
+(1, 4, 'Sabtu', '01:15:00', '22:17:00'),
+(6, 7, 'Senin', '15:00:00', '16:00:00');
 
 -- --------------------------------------------------------
 
@@ -225,7 +222,8 @@ INSERT INTO `pasien` (`id`, `id_akun`, `nama`, `alamat`, `no_ktp`, `no_hp`, `no_
 (7, 4, 'Enembe', 'jalan jalan2', '4444', '51234123', '202312-3'),
 (9, 22, 'Suyadi Santoso', 'Bengkulu', '888213618238', '7872811', '202312-2'),
 (10, 23, 'Ahmad Ehmedi', 'Madura', '89898128371', '8888213', '202312-3'),
-(14, 31, 'Dengan Saya Sendiri', 'Dirumah saya', '88786765612631', '081244772821', '202401-4');
+(15, 33, 'Ardi Caesar', 'Semarang', '927107882671', '081248308171', '202401-5'),
+(16, 34, 'Deni', 'Semarang', '8872219755191', '085388291321', '202401-5');
 
 -- --------------------------------------------------------
 
@@ -261,7 +259,8 @@ INSERT INTO `periksa` (`id`, `id_daftar_poli`, `tgl_periksa`, `catatan`, `biaya_
 (1, 11, '2024-01-05 15:13:19', 'OK', 194000),
 (2, 15, '2024-01-05 21:37:29', 'okeokeoekoke', 216000),
 (3, 16, '2024-01-05 22:02:57', 'oke sudah bisa', 210000),
-(4, 17, '2024-01-05 22:06:19', 'beli aja speaker bluetooth gan', 194000);
+(5, 18, '2024-01-06 13:58:27', 'Oke', 244000),
+(6, 19, '2024-01-08 11:06:16', 'Obat yang saya sarankan diminum saja insha allah sembuh.', 216000);
 
 -- --------------------------------------------------------
 
@@ -331,11 +330,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 (4, 'Enembe', 'dia33@gmail.com', NULL, '$2y$12$xwwgsGBOblIXX22m7CTb5u4duvPU.1B6WWs.mpbShtPQ7ajJgJKv.', NULL, '2023-12-30 03:20:12', '2023-12-30 03:20:12', 'pasien'),
 (13, 'Dokter Budi', 'dokterbudi@gmail.com', NULL, '$2y$12$Nin5PEEOp/FDdBV0futppu/JEGMBPlVOY33BABI0qMdQhX15VnS76', NULL, '2023-12-30 22:22:19', '2024-01-05 07:50:20', 'dokter'),
 (15, 'Dokter Irene', 'dokterirene@gmail.com', NULL, '$2y$12$CJkh5sHz8QthWBzVZVlzQO1gdVNqjEpnUWv5cZAhQK37OfEF5.oz2', NULL, '2023-12-30 22:36:47', '2023-12-30 22:36:47', 'dokter'),
-(17, 'Dokter Ani', 'dokterani@gmail.com', NULL, '$2y$12$nKbSqBhH.9YRwxKWwChAoOrVmmzPoChy6R3EsDtawomu5P3UBZOU.', NULL, '2023-12-30 23:54:19', '2024-01-05 03:24:24', 'dokter'),
+(17, 'Dokter Ani', 'dokterani@gmail.com', NULL, '$2y$12$eE9t6rQHN4V/T.x1M0DpAO5AZTKUJWi6KliDGP9IOMJJMjgiZNMl.', NULL, '2023-12-30 23:54:19', '2024-01-07 21:04:20', 'dokter'),
 (18, 'admin', 'admin@gmail.com', NULL, '$2y$12$kwxXUhhwowxAq5Rr/jCTLu75mvc2kl9lcE5eoBPCyy.1SKkuDUdrS', NULL, '2023-12-31 00:04:14', '2023-12-31 00:04:14', 'admin'),
 (22, 'Suyadi Santoso', 'susan@gmail.com', NULL, '$2y$12$B73LRLS3uKT2cK90EA2BheulxVdVhSySxFjNxtwYZHG1IhXL.kK/O', NULL, '2023-12-31 05:06:10', '2023-12-31 05:06:10', 'pasien'),
 (23, 'Ahmad Ehmedi', 'ahmad@gmail.com', NULL, '$2y$12$Dlga1NivwppTRuA1p26z7uVbinFEvE1oUbHowxF3VKiKg62DQ3HJy', NULL, '2023-12-31 05:11:05', '2023-12-31 05:11:05', 'pasien'),
-(31, 'Dengan Saya Sendiri', 'saya@gmail.com', NULL, '$2y$12$Y274M3zLYboo69bBxlsmse5hqFrFMTc0hv9TCBG9GcsyCL2ao4vau', NULL, '2024-01-05 08:04:31', '2024-01-05 08:04:31', 'pasien');
+(33, 'Ardi Caesar', 'ardi@gmail.com', NULL, '$2y$12$cyCav9JIMRqsrWfOmveIy.cR/HE3W1hqhgD5vWuQwN8dAQxTi3eRe', NULL, '2024-01-07 20:59:44', '2024-01-07 20:59:44', 'pasien'),
+(34, 'Deni', 'deni@gmail.com', NULL, '$2y$12$bbXXhpDwJt2o707Kz1hsruIYuj7aGLeH2tLeSnMON8fOhOe/9Rxgq', NULL, '2024-01-07 21:01:51', '2024-01-07 21:01:51', 'pasien');
 
 --
 -- Indexes for dumped tables
@@ -452,19 +452,19 @@ ALTER TABLE `akun`
 -- AUTO_INCREMENT untuk tabel `daftar_poli`
 --
 ALTER TABLE `daftar_poli`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT untuk tabel `detail_periksa`
 --
 ALTER TABLE `detail_periksa`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `dokter`
 --
 ALTER TABLE `dokter`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
@@ -488,19 +488,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT untuk tabel `obat`
 --
 ALTER TABLE `obat`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT untuk tabel `periksa`
 --
 ALTER TABLE `periksa`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `personal_access_tokens`
@@ -512,13 +512,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT untuk tabel `poli`
 --
 ALTER TABLE `poli`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
