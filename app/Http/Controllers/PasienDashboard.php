@@ -16,36 +16,29 @@ class PasienDashboard extends Controller
     public function index()
     {
         if (auth()->user()->role == 'pasien') {
-
-        $jadwals = Jadwal_periksa::with(['dokter.poli'])->get();
-        $pasien = Pasien::where('id_akun', auth()->user()->id)->first();
-        $cekPHistory = daftar_poli::join('jadwal_periksa', 'daftar_poli.id_jadwal', '=', 'jadwal_periksa.id')
-            ->join('dokter', 'jadwal_periksa.id_dokter', '=', 'dokter.id')
-            ->join('poli', 'dokter.id_poli', '=', 'poli.id')
-            ->where('daftar_poli.id_pasien', $pasien->id)
-            ->select('daftar_poli.*', 'jadwal_periksa.*', 'poli.*', 'dokter.*')
-            ->get();
-        $test = Daftar_poli::all();
-        // dd($cekPHistory->toArray());
-        return view('dashboard', compact('jadwals', 'pasien', 'cekPHistory'));
+            $jadwals = Jadwal_periksa::with(['dokter.poli'])->where('aktif', 'yes')->get();
+            $pasien = Pasien::where('id_akun', auth()->user()->id)->first();
+            $cekPHistory = daftar_poli::join('jadwal_periksa', 'daftar_poli.id_jadwal', '=', 'jadwal_periksa.id')
+                ->join('dokter', 'jadwal_periksa.id_dokter', '=', 'dokter.id')
+                ->join('poli', 'dokter.id_poli', '=', 'poli.id')
+                ->where('daftar_poli.id_pasien', $pasien->id)
+                ->select('daftar_poli.*', 'jadwal_periksa.*', 'poli.*', 'dokter.*')
+                ->get();
+            // $test = Daftar_poli::all();
+            return view('dashboard', compact('jadwals', 'pasien', 'cekPHistory'));
         }
-        // } elseif (auth()->user()->role == 'admin') {
-        //     return redirect()->route('dashboard');
-        // } elseif (auth()->user()->role == 'dokter') {
-        //     return redirect()->route('dashboard');
-        // }
         return view('dashboard');
     }
 
     public function daftarPoli()
     {
         $polis = Daftar_poli::all();
-        $jadwal = Jadwal_periksa::with(['dokter', 'poli'])->get();
+        $jadwals = Jadwal_periksa::with(['dokter.poli'])->where('aktif', 'yes')->get();
         $user = auth()->user()->id;
         $pasien = Pasien::where('id_akun', $user)->first();
 
 
-        return view('pasien.daftarPoli', compact('polis', 'jadwal', 'pasien'));
+        return view('pasien.daftarPoli', compact('polis', 'jadwals', 'pasien'));
     }
 
     //tolong benarkan codingan dibawah ini dengan penambahan parameter id

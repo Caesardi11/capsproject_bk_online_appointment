@@ -55,9 +55,9 @@ class DokterDashboard extends Controller
 
     public function jadwalPeriksaDokter ()
     {
-        $dokter = Dokter::where('id_akun', auth()->user()->id)->first();
-        $cekJadwalPeriksa = Jadwal_periksa::where('id_dokter', $dokter->id)->get();
-        $operation = '';
+        $dokter = Dokter::where('id_akun', auth()->user()->id);
+        $cekJadwalPeriksa = Jadwal_periksa::where('id_dokter', $dokter->first()->id)->get();
+        $operation = 'input';
         date_default_timezone_set('Asia/Jakarta');
         $hariH = date('l');
         $hari = [
@@ -70,19 +70,20 @@ class DokterDashboard extends Controller
             'Minggu' => 'Sunday',
         ];
         $keys = array_keys($hari);
-
-        if ($cekJadwalPeriksa->count() == 0) {
-            $operation = 'input';
-            return view('dokter.jadwalPeriksaDokter', compact('operation', 'keys'));
-        } else if ($cekJadwalPeriksa->count() > 0 && $cekJadwalPeriksa[0]->hari != array_search($hariH, $hari)) {
-            $operation = 'edit';
-            return view('dokter.jadwalPeriksaDokter', compact('cekJadwalPeriksa', 'operation', 'keys'));
-        } else if ($cekJadwalPeriksa[0]->hari == array_search($hariH, $hari)) {
-            $operation = 'noinput';
-            return view('dokter.jadwalPeriksaDokter', compact('cekJadwalPeriksa', 'operation', 'keys'));
+        $jadwal = '';
+        $jadwalDokters = [];
+        foreach ($cekJadwalPeriksa as $key => $value) {
+            $jadwalDokters[] = [
+                'id' => $value->id,
+                'nama' => $value->dokter->nama,
+                'hari' => $cekJadwalPeriksa[$key]->hari,
+                'jam_mulai' => $cekJadwalPeriksa[$key]->jam_mulai,
+                'jam_selesai' => $cekJadwalPeriksa[$key]->jam_selesai,
+                'status'=> $cekJadwalPeriksa[$key]->aktif,
+            ];
         }
 
-        return view('dokter.jadwalPeriksaDokter', compact('cekJadwalPeriksa', 'operation', 'keys'));
+        return view('dokter.jadwalPeriksaDokter', compact('cekJadwalPeriksa', 'operation', 'keys', 'jadwalDokters', 'hariH'));
     }
 
     public function inputJadwalProses(Request $request)
@@ -92,43 +93,100 @@ class DokterDashboard extends Controller
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
+            'status' => 'required',
         ]);
 
         $user = auth()->user()->id;
         $dokter = Dokter::where('id_akun', $user)->first();
+        $cekJadwalPeriksa = Jadwal_periksa::where('id_dokter', $dokter->id)->get();
         $hari = $request->input('hari');
         $jam_mulai = $request->input('jam_mulai');
         $jam_selesai = $request->input('jam_selesai');
-        // dd($dokter, $hari, $jam_mulai, $jam_selesai);
+        if (request('status') == 'yes') {
+            foreach ($cekJadwalPeriksa as $jadwal) {
+                Jadwal_periksa::where('id', $jadwal->id)->update([
+                    'aktif' => 'no',
+                ]);
+            }
+        }
         Jadwal_periksa::create([
             'id_dokter' => (int) $dokter->id,
             'hari' => $hari,
             'jam_mulai' => $jam_mulai,
             'jam_selesai' => $jam_selesai,
+            'aktif' => request('status'),
         ]);
 
         return redirect()->route('jadwalPeriksaDokter')->with('success', 'Jadwal berhasil ditambahkan!');
     }
 
-    public function editJadwalProses(Request $request)
+    public function editJadwal($id_jadwal)
+    {
+        $user = auth()->user()->id;
+        $dokter = Dokter::where('id_akun', $user)->first();
+        $cekJadwalPeriksa = Jadwal_periksa::where('id_dokter', $dokter->id)->get();
+        $jadwal = Jadwal_periksa::where('id', $id_jadwal)->first();
+        $operation = 'edit';
+        date_default_timezone_set('Asia/Jakarta');
+        $hariH = date('l');
+        $hari = [
+            'Senin' => 'Monday',
+            'Selasa' => 'Tuesday',
+            'Rabu' => 'Wednesday',
+            'Kamis' => 'Thursday',
+            'Jumat' => 'Friday',
+            'Sabtu' => 'Saturday',
+            'Minggu' => 'Sunday',
+        ];
+        $keys = array_keys($hari);
+        $jadwalDokters = [];
+        foreach ($cekJadwalPeriksa as $key => $value) {
+            $jadwalDokters[] = [
+                'id' => $value->id,
+                'nama' => $value->dokter->nama,
+                'hari' => $cekJadwalPeriksa[$key]->hari,
+                'jam_mulai' => $cekJadwalPeriksa[$key]->jam_mulai,
+                'jam_selesai' => $cekJadwalPeriksa[$key]->jam_selesai,
+                'status'=> $cekJadwalPeriksa[$key]->aktif,
+            ];
+        }
+        if (array_search($hariH, $hari) == $jadwal->hari) {
+            $operation = 'noinput';
+        }
+        // dd($jadwalDokters);
+        return view('dokter.jadwalPeriksaDokter', compact('cekJadwalPeriksa', 'operation', 'keys', 'jadwalDokters', 'jadwal', 'hariH'));
+    }
+
+    public function editJadwalProses(Request $request, $id_jadwal)
     {
         $request->validate([
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
+            'status' => 'required',
         ]);
 
         $user = auth()->user()->id;
         $dokter = Dokter::where('id_akun', $user)->first();
-        $jadwal = Jadwal_periksa::where('id_dokter', $dokter->id);
-
-        $jadwal->update([
-            'hari' => $request->input('hari'),
-            'jam_mulai' => $request->input('jam_mulai'),
-            'jam_selesai' => $request->input('jam_selesai'),
+        $cekJadwalPeriksa = Jadwal_periksa::where('id_dokter', $dokter->id)->get();
+        $hari = $request->input('hari');
+        $jam_mulai = $request->input('jam_mulai');
+        $jam_selesai = $request->input('jam_selesai');
+        if (request('status') == 'yes') {
+            foreach ($cekJadwalPeriksa as $jadwal) {
+                Jadwal_periksa::where('id', $jadwal->id)->update([
+                    'aktif' => 'no',
+                ]);
+            }
+        }
+        Jadwal_periksa::where('id', $id_jadwal)->update([
+            'hari' => $hari,
+            'jam_mulai' => $jam_mulai,
+            'jam_selesai' => $jam_selesai,
+            'aktif' => request('status'),
         ]);
 
-        return redirect()->back()->with('success', 'Jadwal berhasil diubah!');
+        return redirect()->route('jadwalPeriksaDokter')->with('success', 'Jadwal berhasil diubah!');
     }
 
     public function periksa()

@@ -21,6 +21,41 @@
         </i>
     </div>
     <div class="mt-16">
+        <div class="relative overflow-x-auto rounded-lg mt-5">
+            <table id="example" class="table-auto w-full w-full text-sm text-left rtl:text-right text-black">
+                <thead class="text-xs text-white uppercase bg-gray-500">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Nama Dokter</th>
+                        <th scope="col" class="px-6 py-3">Hari</th>
+                        <th scope="col" class="px-6 py-3">Jam Mulai</th>
+                        <th scope="col" class="px-6 py-3">Jam Selesai</th>
+                        <th scope="col" class="px-6 py-3">Jadwal Aktif</th>
+                        <th scope="col" class="px-6 py-3">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($jadwalDokters as $table)
+                        <tr class="bg-gray-200 border-gray-900">
+                            <td scope="row" class="px-6 py-4 whitespace-nowrap">
+                                {{ isset($table['nama']) ? $table['nama'] : 'Tidak Ada Nama' }}</td>
+                            <td scope="row" class="px-6 py-4 whitespace-nowrap">
+                                {{ isset($table['hari']) ? $table['hari'] : 'Tidak Ada Hari' }}</td>
+                            <td scope="row" class="px-6 py-4 whitespace-nowrap">
+                                {{ isset($table['jam_mulai']) ? $table['jam_mulai'] : 'Tidak Ada Jam Mulai' }}</td>
+                            <td scope="row" class="px-6 py-4 whitespace-nowrap">
+                                {{ isset($table['jam_selesai']) ? $table['jam_selesai'] : 'Tidak Ada Jam Selesai' }}</td>
+                            <td scope="row" class="px-6 py-4 whitespace-nowrap">
+                                {{ isset($table['status']) ? $table['status'] : 'Tidak Ada Status' }}</td>
+                            <td scope="row" class="px-6 py-4 whitespace-nowrap">
+                                <a href="{{ route('editJadwal', $table['id']) }}"
+                                    class="rounded-md bg-orange-400 px-1.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400">Pilih</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-16">
         @if ($operation == 'input')
             @include('dokter.assets.formInputJadwal')
         @elseif ($operation == 'edit')
@@ -28,5 +63,15 @@
         @elseif ($operation == 'noinput')
             @include('dokter.assets.formDisabled')
         @endif
+        </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable({
+                order: [
+                    [2, 'asc']
+                ],
+            });
+        });
+    </script>
 @endsection

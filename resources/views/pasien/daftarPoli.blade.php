@@ -28,8 +28,7 @@
                 <select name="jadwal" id="jadwal"
                     class="block w-full px-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <option class="text-gray-400" value="0">Pilih Jadwal</option>
-                    //jadwal ambilkan nama dokter, nama poli, hari, jam mulai, jam selesai
-                    @foreach ($jadwal as $jadwal)
+                    @foreach ($jadwals as $jadwal)
                         <option value="{{ $jadwal['id'] }}">{{ ucwords($jadwal->dokter->nama) }} -
                             {{ ucwords($jadwal->dokter->poli->nama_poli) }} - {{ ucwords($jadwal['hari']) }} -
                             {{ $jadwal['jam_mulai'] }} - {{ $jadwal['jam_selesai'] }}</option>
