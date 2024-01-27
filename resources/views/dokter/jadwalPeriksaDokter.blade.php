@@ -49,6 +49,12 @@
                             <td scope="row" class="px-6 py-4 whitespace-nowrap">
                                 <a href="{{ route('editJadwal', $table['id']) }}"
                                     class="rounded-md bg-orange-400 px-1.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400">Pilih</a>
+                                <Form action="{{ route('hapusJadwal', $table['id']) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="rounded-md bg-red-400 px-1.5 py-1 mt-2 text-sm font-semibold text-white shadow-sm hover:bg-red-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400">Hapus</button>
+                                </Form>
                             </td>
                         </tr>
                     @endforeach

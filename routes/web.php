@@ -76,6 +76,7 @@ middleware(['auth'])->group(function () {
         Route::get('dokter/jadwal-periksa', [DokterDashboard::class, 'jadwalPeriksaDokter'])->name('jadwalPeriksaDokter');
         Route::post('dokter/input-jadwal-proses', [DokterDashboard::class, 'inputJadwalProses'])->name('inputJadwalProses');
         Route::get('dokter/edit-jadwal-{id_jadwal}', [DokterDashboard::class,'editJadwal'])->name('editJadwal');
+        Route::delete('dokter/hapus-jadwal-{id_jadwal}', [DokterDashboard::class,'hapusJadwal'])->name('hapusJadwal');
         Route::put('dokter/edit-jadwal-proses-{id_jadwal}', [DokterDashboard::class,'editJadwalProses'])->name('editJadwalProses');
         Route::get('dokter/periksa', [DokterDashboard::class, 'periksa'])->name('periksa');
         Route::get('dokter/periksa/{id_pasien}', [DokterDashboard::class, 'periksaProses'])->name('periksaProses');

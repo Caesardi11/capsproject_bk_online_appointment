@@ -189,6 +189,11 @@ class DokterDashboard extends Controller
         return redirect()->route('jadwalPeriksaDokter')->with('success', 'Jadwal berhasil diubah!');
     }
 
+    public function hapusJadwal($id_jadwal) {
+        Jadwal_periksa::where('id', $id_jadwal)->delete();
+        return redirect()->route('jadwalPeriksaDokter')->with('success', 'Jadwal berhasil dihapus!');
+    }
+
     public function periksa()
     {
         $dokter = Dokter::where('id_akun', Auth::user()->id)->first();
